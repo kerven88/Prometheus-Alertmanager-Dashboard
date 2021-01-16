@@ -36,7 +36,7 @@ benchmark-go:
 $(GOBIN)/benchstat: tools/benchstat/go.mod tools/benchstat/go.sum
 	@$(GO) install -modfile=tools/benchstat/go.mod golang.org/x/perf/cmd/benchstat
 benchmark-compare-go: $(GOBIN)/benchstat
-	@$(GOBIN)/benchstat master.txt new.txt
+	@$(GOBIN)/benchstat main.txt new.txt
 
 $(GOBIN)/looppointer: tools/looppointer/go.mod tools/looppointer/go.sum
 	$(GO) install -modfile=tools/looppointer/go.mod github.com/kyoh86/looppointer/cmd/looppointer
@@ -62,6 +62,7 @@ format-go:
 
 .PHONY: download-deps-go
 download-deps-go:
+	@for f in $(wildcard tools/*/go.mod) ; do echo ">>> $$f" && cd $(CURDIR)/`dirname "$$f"` && $(GO) mod download && cd $(CURDIR) ; done
 	$(GO) mod download
 
 .PHONY: install-deps-build-go
@@ -79,18 +80,6 @@ mock-assets: $(GOBIN)/go-bindata-assetfs
 	cp ui/public/* ui/build/
 	env PATH="$(PATH):$(GOBIN)" $(GOBIN)/go-bindata-assetfs -o cmd/karma/bindata_assetfs.go -nometadata ui/build/... cmd/karma/tests/bindata/...
 	rm -fr ui/build
-
-$(GOBIN)/github-changelog-generator: tools/github-changelog-generator/go.mod tools/github-changelog-generator/go.sum
-	$(GO) install -modfile=tools/github-changelog-generator/go.mod github.com/digitalocean/github-changelog-generator
-.PHONY: changelog
-changelog: $(GOBIN)/github-changelog-generator
-	@echo "Full changelog:"
-	@github-changelog-generator\
-		-org prymitive \
-		-repo karma \
-		| grep -vE '@renovate|@dependabot' \
-		| sed s/' PR '/' '/g \
-		| sed s/'- @prymitive -'/'-'/g
 
 .PHONY: tools-go-mod-tidy
 tools-go-mod-tidy:

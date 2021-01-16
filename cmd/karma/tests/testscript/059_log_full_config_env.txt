@@ -12,7 +12,7 @@ env ALERTMANAGER_TIMEOUT=10s
 env ALERTACKNOWLEDGEMENT_ENABLED=true
 env ALERTACKNOWLEDGEMENT_DURATION=5m
 env ALERTACKNOWLEDGEMENT_AUTHOR=karma
-env ALERTACKNOWLEDGEMENT_COMMENTPREFIX=ACK
+env ALERTACKNOWLEDGEMENT_COMMENT="ACK! This alert was acknowledged via unit tests"
 
 env ANNOTATIONS_DEFAULT_HIDDEN=true
 env ANNOTATIONS_HIDDEN='help summary'
@@ -102,11 +102,13 @@ level=info msg="      insecureSkipVerify: false"
 level=info msg="    headers: {}"
 level=info msg="    cors:"
 level=info msg="      credentials: include"
+level=info msg="    healthcheck:"
+level=info msg="      filters: {}"
 level=info msg="alertAcknowledgement:"
 level=info msg="  enabled: true"
 level=info msg="  duration: 5m0s"
 level=info msg="  author: karma"
-level=info msg="  commentPrefix: ACK"
+level=info msg="  comment: '\"ACK!'"
 level=info msg="annotations:"
 level=info msg="  default:"
 level=info msg="    hidden: true"
@@ -158,6 +160,9 @@ level=info msg="    - instance"
 level=info msg="    - cluster"
 level=info msg="listen:"
 level=info msg="  address: 127.0.0.1"
+level=info msg="  tls:"
+level=info msg="    cert: \"\""
+level=info msg="    key: \"\""
 level=info msg="  port: 1234"
 level=info msg="  prefix: /prefix/"
 level=info msg="log:"

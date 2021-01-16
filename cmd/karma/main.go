@@ -3,6 +3,7 @@ package main
 import (
 	"compress/flate"
 	"context"
+	"errors"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -109,16 +110,20 @@ func setupRouter(router *chi.Mux) {
 		MaxAge:           300,
 	}))
 
+	allowAuthBypass := []string{
+		getViewURL("/health"),
+		getViewURL("/metrics"),
+	}
 	if config.Config.Authentication.Header.Name != "" {
 		config.Config.Authentication.Enabled = true
-		router.Use(headerAuth(config.Config.Authentication.Header.Name, config.Config.Authentication.Header.ValueRegex))
+		router.Use(headerAuth(config.Config.Authentication.Header.Name, config.Config.Authentication.Header.ValueRegex, allowAuthBypass))
 	} else if len(config.Config.Authentication.BasicAuth.Users) > 0 {
 		config.Config.Authentication.Enabled = true
 		users := map[string]string{}
 		for _, u := range config.Config.Authentication.BasicAuth.Users {
 			users[u.Username] = u.Password
 		}
-		router.Use(basicAuth(users))
+		router.Use(basicAuth(users, allowAuthBypass))
 	}
 
 	router.Get(getViewURL("/"), index)
@@ -187,6 +192,7 @@ func setupUpstreams() error {
 			alertmanager.WithHTTPTransport(httpTransport), // we will pass a nil unless TLS.CA or TLS.Cert is set
 			alertmanager.WithHTTPHeaders(s.Headers),
 			alertmanager.WithCORSCredentials(s.CORS.Credentials),
+			alertmanager.WithHealthchecks(s.Healthcheck.Filters),
 		)
 		if err != nil {
 			return fmt.Errorf("failed to create Alertmanager '%s' with URI '%s': %s", s.Name, uri.SanitizeURI(s.URI), err)
@@ -439,22 +445,39 @@ func serve(errorHandling pflag.ErrorHandling) error {
 	if err != nil {
 		return err
 	}
-	log.Info().Str("address", listener.Addr().String()).Msg("Starting HTTP server")
 
 	httpServer := &http.Server{
 		Addr:    listen,
 		Handler: router,
 	}
-	go func() {
-		_ = httpServer.Serve(listener)
-	}()
 
 	quit := make(chan os.Signal, 1)
+
+	if config.Config.Listen.TLS.Cert != "" {
+		log.Info().Str("address", listener.Addr().String()).Msg("Starting HTTPS server")
+		go func() {
+			err := httpServer.ServeTLS(listener, config.Config.Listen.TLS.Cert, config.Config.Listen.TLS.Key)
+			if !errors.Is(err, http.ErrServerClosed) {
+				log.Error().Err(err).Msg("HTTPS server startup error")
+				quit <- syscall.SIGTERM
+			}
+		}()
+	} else {
+		log.Info().Str("address", listener.Addr().String()).Msg("Starting HTTP server")
+		go func() {
+			err := httpServer.Serve(listener)
+			if !errors.Is(err, http.ErrServerClosed) {
+				log.Error().Err(err).Msg("HTTP server startup error")
+				quit <- syscall.SIGTERM
+			}
+		}()
+	}
+
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Info().Msg("Shutting down HTTP server")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	if err := httpServer.Shutdown(ctx); err != nil {
 		return fmt.Errorf("shutdown error: %s", err)

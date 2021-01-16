@@ -16,6 +16,9 @@ $(NODE_INSTALL): package.json package-lock.json
 	@if [ -e $(NODE_INSTALL) ]; then npm install ; else npm ci; fi
 	touch $@
 
+.PHONY: npm-fetch
+npm-fetch: $(NODE_INSTALL)
+
 $(NODE_PATH)/%: $(NODE_INSTALL)
 	@if [ ! -x $@ ]; then echo "missing script: $@" ; exit 1; fi
 
@@ -43,14 +46,6 @@ lint-js: $(NODE_PATH)/eslint
 	@rm -fr node_modules/.cache/eslint-loader
 	eslint --ext .js,.jsx,.ts,.tsx src
 
-.PHONY: lint-git-ci
-lint-git-ci: $(NODE_PATH)/commitlint-travis
-	commitlint-travis
-
-.PHONY: lint-docs
-lint-docs: $(NODE_PATH)/markdownlint
-	markdownlint ../*.md ../docs
-
 .PHONY: lint-deps
 lint-deps: $(NODE_PATH)/depcheck
 	depcheck $(CURDIR)
@@ -66,3 +61,8 @@ format: $(NODE_PATH)/prettier
 
 build/stats.json: build
 	source-map-explorer build/static/*/*.{js,css} --json > build/stats.json
+
+.PHONY: npm-upgrade
+npm-upgrade:
+	rm -fr node_modules package-lock.json
+	npm install

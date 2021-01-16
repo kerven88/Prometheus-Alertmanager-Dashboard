@@ -48,11 +48,13 @@ alertmanager:
     headers: {}
     cors:
       credentials: include
+    healthcheck:
+      filters: {}
 alertAcknowledgement:
   enabled: false
   duration: 15m0s
   author: karma
-  commentPrefix: ACK!
+  comment: ACK! This alert was acknowledged using karma on %NOW%
 annotations:
   default:
     hidden: true
@@ -97,6 +99,9 @@ labels:
     - gg
 listen:
   address: 0.0.0.0
+  tls:
+    cert: ""
+    key: ""
   port: 80
   prefix: /
 log:

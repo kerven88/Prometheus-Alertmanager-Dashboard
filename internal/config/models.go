@@ -9,6 +9,10 @@ type AlertmanagerCORS struct {
 	Credentials string
 }
 
+type AlertmanagerHealthcheck struct {
+	Filters map[string][]string `yaml:"filters" koanf:"filters"`
+}
+
 type AlertmanagerConfig struct {
 	Cluster     string
 	Name        string
@@ -23,8 +27,9 @@ type AlertmanagerConfig struct {
 		Key                string
 		InsecureSkipVerify bool `yaml:"insecureSkipVerify" koanf:"insecureSkipVerify"`
 	}
-	Headers map[string]string
-	CORS    AlertmanagerCORS `yaml:"cors" koanf:"cors"`
+	Headers     map[string]string
+	CORS        AlertmanagerCORS        `yaml:"cors" koanf:"cors"`
+	Healthcheck AlertmanagerHealthcheck `yaml:"healthcheck" koanf:"healthcheck"`
 }
 
 type LinkDetectRules struct {
@@ -81,10 +86,10 @@ type configSchema struct {
 		CORS        AlertmanagerCORS `yaml:"-" koanf:"cors"`
 	}
 	AlertAcknowledgement struct {
-		Enabled       bool
-		Duration      time.Duration
-		Author        string
-		CommentPrefix string `yaml:"commentPrefix" koanf:"commentPrefix"`
+		Enabled  bool
+		Duration time.Duration
+		Author   string
+		Comment  string
 	} `yaml:"alertAcknowledgement" koanf:"alertAcknowledgement"`
 	Annotations struct {
 		Default struct {
@@ -128,8 +133,12 @@ type configSchema struct {
 	}
 	Listen struct {
 		Address string
-		Port    int
-		Prefix  string
+		TLS     struct {
+			Cert string
+			Key  string
+		}
+		Port   int
+		Prefix string
 	}
 	Log struct {
 		Config    bool

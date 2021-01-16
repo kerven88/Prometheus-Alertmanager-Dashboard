@@ -1,4 +1,4 @@
-FROM node:14.15.1-alpine as nodejs-builder
+FROM node:14.15.4-alpine as nodejs-builder
 RUN mkdir -p /src/ui
 COPY ui/package.json ui/package-lock.json /src/ui/
 ENV NODE_ENV=production
@@ -7,7 +7,7 @@ RUN apk add make git
 COPY ui /src/ui
 RUN make -C /src/ui build
 
-FROM golang:1.15.5-alpine as go-builder
+FROM golang:1.15.6-alpine as go-builder
 RUN apk add make git
 COPY Makefile /src/Makefile
 COPY make /src/make
@@ -23,8 +23,8 @@ COPY internal /src/internal
 ARG VERSION
 RUN CGO_ENABLED=0 make -C /src VERSION="${VERSION:-dev}" karma
 
-FROM alpine:3.12
-COPY --from=lmierzwa/kthxbye:v0.9 /kthxbye /kthxbye
+FROM alpine:3.13
+COPY --from=ghcr.io/prymitive/kthxbye:v0.10 /kthxbye /kthxbye
 COPY --from=prom/alertmanager:v0.21.0 /bin/alertmanager /alertmanager
 RUN apk add supervisor python3 && rm  -rf /tmp/* /var/cache/apk/*
 COPY demo/supervisord.conf /etc/supervisord.conf

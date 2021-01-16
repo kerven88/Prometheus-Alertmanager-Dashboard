@@ -110,6 +110,15 @@ only after all alerts are resolved you can use
 See [configuration docs](/docs/CONFIGURATION.md#alert-acknowledgement) for
 details.
 
+### Dead Man’s Switch support
+
+Starting with `v0.78` karma can be configured to check for
+[Dead Man’s Switch](https://en.wikipedia.org/wiki/Dead_man%27s_switch)
+style alerts (alert that is always firing). If no alert is found in given
+alertmanager karma will show an error in the UI.
+See `healthcheck:filters` option on [configuration docs](/docs/CONFIGURATION.md#alertmanagers)
+for details.
+
 ### Dark mode
 
 Starting with `v0.52` release karma includes both light and dark themes.
@@ -121,7 +130,7 @@ media queries.
 
 ## Demo
 
-[Online demo](https://karma-demo.herokuapp.com/) is running latest master branch
+[Online demo](https://karma-demo.herokuapp.com/) is running latest main branch
 or PR branch version. It might include features that are experimental and not
 yet ready to be included.
 
@@ -234,7 +243,7 @@ Official docker images are built and hosted on
 Images are built automatically for:
 
 - release tags in git - `ghcr.io/prymitive/karma:vX.Y.Z`
-- master branch commits - `ghcr.io/prymitive/karma:latest`
+- main branch commits - `ghcr.io/prymitive/karma:latest`
 
 #### Examples
 
@@ -245,11 +254,11 @@ To start a release image run:
 Latest release details can be found on
 [GitHub](https://github.com/prymitive/karma/releases).
 
-To start docker image build from lastet master branch run:
+To start docker image build from lastet main branch run:
 
     docker run -e ALERTMANAGER_URI=https://alertmanager.example.com ghcr.io/prymitive/karma:latest
 
-Note that latest master branch might have bugs or breaking changes. Using
+Note that latest main branch might have bugs or breaking changes. Using
 release images is strongly recommended for any production use.
 
 ### Building a Docker image

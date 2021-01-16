@@ -22,7 +22,7 @@ func TestEqualMatcher(t *testing.T) {
 		{"1", 1, true, false},
 		{"a", "ab", true, false},
 		{12, 13, true, false},
-		{time.Now(), time.Now(), true, false},
+		{&matchTest{}, &matchTest{}, true, false},
 	}
 	for _, mt := range tests {
 		m := equalMatcher{}
@@ -42,7 +42,6 @@ func TestNotEqualMatcher(t *testing.T) {
 		{"1", 1, true, true},
 		{"a", "ab", true, true},
 		{12, 13, true, true},
-		{time.Now(), time.Now(), true, true},
 	}
 	for _, mt := range tests {
 		m := notEqualMatcher{}

@@ -30,43 +30,20 @@ exports[`<Configuration /> matches snapshot 1`] = `
     </div>
     <div class=\\"card-body my-2\\">
       <div class=\\"form-group mb-0 text-center\\">
-        <div aria-disabled=\\"false\\"
-             class=\\"input-range\\"
+        <div class=\\"input-range-track\\"
+             style=\\"transform: scale(1); cursor: pointer;\\"
         >
-          <span class=\\"input-range__label input-range__label--min\\">
-            <span class=\\"input-range__label-container\\">
-              10s
-            </span>
-          </span>
-          <div class=\\"input-range__track input-range__track--background\\">
-            <div style=\\"left: 0%; width: 18.181818181818183%;\\"
-                 class=\\"input-range__track input-range__track--active\\"
-            >
-            </div>
-            <span class=\\"input-range__slider-container\\"
-                  style=\\"position: absolute; left: 18.181818181818183%;\\"
-            >
-              <span class=\\"input-range__label input-range__label--value\\">
-                <span class=\\"input-range__label-container\\">
-                  30s
-                </span>
-              </span>
-              <div aria-valuemax=\\"120\\"
-                   aria-valuemin=\\"10\\"
-                   aria-valuenow=\\"30\\"
-                   class=\\"input-range__slider\\"
-                   draggable=\\"false\\"
-                   role=\\"slider\\"
-                   tabindex=\\"0\\"
-              >
-              </div>
-            </span>
+          <div class=\\"input-range-thumb\\"
+               style=\\"position: absolute; z-index: 0; cursor: grab; user-select: none; transform: translate(NaNpx, NaNpx);\\"
+               tabindex=\\"0\\"
+               aria-valuemax=\\"120\\"
+               aria-valuemin=\\"10\\"
+               aria-valuenow=\\"30\\"
+               draggable=\\"false\\"
+               role=\\"slider\\"
+          >
+            30s
           </div>
-          <span class=\\"input-range__label input-range__label--max\\">
-            <span class=\\"input-range__label-container\\">
-              120s
-            </span>
-          </span>
         </div>
       </div>
     </div>
@@ -108,7 +85,7 @@ exports[`<Configuration /> matches snapshot 1`] = `
             <label class=\\"custom-control-label cursor-pointer mr-3\\"
                    for=\\"configuration-autohide\\"
             >
-              Hide filter bar when idle
+              Hide filter bar and alert details when idle
             </label>
           </span>
         </div>
@@ -143,8 +120,8 @@ exports[`<Configuration /> matches snapshot 1`] = `
     <div class=\\"card-body my-2\\">
       <div class=\\"form-group mb-2\\">
         <div class=\\" css-2b097c-container\\">
-          <div class=\\"react-select__control css-r5n82u-control\\">
-            <div class=\\"react-select__value-container react-select__value-container--has-value css-1ne8613-ValueContainer\\">
+          <div class=\\"react-select__control css-cat782-control\\">
+            <div class=\\"react-select__value-container react-select__value-container--has-value css-17yk2dy-ValueContainer\\">
               <div class=\\"react-select__single-value css-1wh03ml-singleValue\\">
                 Automatic theme, follow browser preference
               </div>
@@ -160,10 +137,10 @@ exports[`<Configuration /> matches snapshot 1`] = `
                          tabindex=\\"0\\"
                          type=\\"text\\"
                          aria-autocomplete=\\"list\\"
-                         style=\\"box-sizing: content-box; width: 2px; border: 0px; font-size: inherit; opacity: 1; outline: 0; padding: 0px;\\"
+                         style=\\"box-sizing: content-box; width: 2px; border: 0px; opacity: 1; outline: 0; padding: 0px;\\"
                          value
                   >
-                  <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-size: inherit; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
+                  <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
                   </div>
                 </div>
               </div>
@@ -249,43 +226,20 @@ exports[`<Configuration /> matches snapshot 1`] = `
     </div>
     <div class=\\"card-body my-2\\">
       <div class=\\"form-group mb-0 text-center\\">
-        <div aria-disabled=\\"false\\"
-             class=\\"input-range\\"
+        <div class=\\"input-range-track\\"
+             style=\\"transform: scale(1); cursor: pointer;\\"
         >
-          <span class=\\"input-range__label input-range__label--min\\">
-            <span class=\\"input-range__label-container\\">
-              300
-            </span>
-          </span>
-          <div class=\\"input-range__track input-range__track--background\\">
-            <div style=\\"left: 0%; width: 24%;\\"
-                 class=\\"input-range__track input-range__track--active\\"
-            >
-            </div>
-            <span class=\\"input-range__slider-container\\"
-                  style=\\"position: absolute; left: 24%;\\"
-            >
-              <span class=\\"input-range__label input-range__label--value\\">
-                <span class=\\"input-range__label-container\\">
-                  420
-                </span>
-              </span>
-              <div aria-valuemax=\\"800\\"
-                   aria-valuemin=\\"300\\"
-                   aria-valuenow=\\"420\\"
-                   class=\\"input-range__slider\\"
-                   draggable=\\"false\\"
-                   role=\\"slider\\"
-                   tabindex=\\"0\\"
-              >
-              </div>
-            </span>
+          <div class=\\"input-range-thumb\\"
+               style=\\"position: absolute; z-index: 0; cursor: grab; user-select: none; transform: translate(NaNpx, NaNpx);\\"
+               tabindex=\\"0\\"
+               aria-valuemax=\\"800\\"
+               aria-valuemin=\\"300\\"
+               aria-valuenow=\\"420\\"
+               draggable=\\"false\\"
+               role=\\"slider\\"
+          >
+            420
           </div>
-          <span class=\\"input-range__label input-range__label--max\\">
-            <span class=\\"input-range__label-container\\">
-              800
-            </span>
-          </span>
         </div>
       </div>
     </div>
@@ -317,43 +271,20 @@ exports[`<Configuration /> matches snapshot 1`] = `
     </div>
     <div class=\\"card-body my-2\\">
       <div class=\\"form-group mb-0 text-center\\">
-        <div aria-disabled=\\"false\\"
-             class=\\"input-range\\"
+        <div class=\\"input-range-track\\"
+             style=\\"transform: scale(1); cursor: pointer;\\"
         >
-          <span class=\\"input-range__label input-range__label--min\\">
-            <span class=\\"input-range__label-container\\">
-              1
-            </span>
-          </span>
-          <div class=\\"input-range__track input-range__track--background\\">
-            <div style=\\"left: 0%; width: 44.44444444444444%;\\"
-                 class=\\"input-range__track input-range__track--active\\"
-            >
-            </div>
-            <span class=\\"input-range__slider-container\\"
-                  style=\\"position: absolute; left: 44.44444444444444%;\\"
-            >
-              <span class=\\"input-range__label input-range__label--value\\">
-                <span class=\\"input-range__label-container\\">
-                  5
-                </span>
-              </span>
-              <div aria-valuemax=\\"10\\"
-                   aria-valuemin=\\"1\\"
-                   aria-valuenow=\\"5\\"
-                   class=\\"input-range__slider\\"
-                   draggable=\\"false\\"
-                   role=\\"slider\\"
-                   tabindex=\\"0\\"
-              >
-              </div>
-            </span>
+          <div class=\\"input-range-thumb\\"
+               style=\\"position: absolute; z-index: 0; cursor: grab; user-select: none; transform: translate(NaNpx, NaNpx);\\"
+               tabindex=\\"0\\"
+               aria-valuemax=\\"10\\"
+               aria-valuemin=\\"1\\"
+               aria-valuenow=\\"5\\"
+               draggable=\\"false\\"
+               role=\\"slider\\"
+          >
+            5
           </div>
-          <span class=\\"input-range__label input-range__label--max\\">
-            <span class=\\"input-range__label-container\\">
-              10
-            </span>
-          </span>
         </div>
       </div>
     </div>
@@ -386,8 +317,8 @@ exports[`<Configuration /> matches snapshot 1`] = `
     <div class=\\"card-body my-2\\">
       <div class=\\"form-group mb-0\\">
         <div class=\\" css-2b097c-container\\">
-          <div class=\\"react-select__control css-r5n82u-control\\">
-            <div class=\\"react-select__value-container react-select__value-container--has-value css-1ne8613-ValueContainer\\">
+          <div class=\\"react-select__control css-cat782-control\\">
+            <div class=\\"react-select__value-container react-select__value-container--has-value css-17yk2dy-ValueContainer\\">
               <div class=\\"react-select__single-value css-1wh03ml-singleValue\\">
                 Collapse on mobile
               </div>
@@ -403,10 +334,10 @@ exports[`<Configuration /> matches snapshot 1`] = `
                          tabindex=\\"0\\"
                          type=\\"text\\"
                          aria-autocomplete=\\"list\\"
-                         style=\\"box-sizing: content-box; width: 2px; border: 0px; font-size: inherit; opacity: 1; outline: 0; padding: 0px;\\"
+                         style=\\"box-sizing: content-box; width: 2px; border: 0px; opacity: 1; outline: 0; padding: 0px;\\"
                          value
                   >
-                  <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-size: inherit; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
+                  <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
                   </div>
                 </div>
               </div>
@@ -464,8 +395,8 @@ exports[`<Configuration /> matches snapshot 1`] = `
         <div class=\\"d-flex flex-fill flex-lg-row flex-column justify-content-between\\">
           <div class=\\"flex-shrink-0 flex-grow-1 flex-basis-auto\\">
             <div class=\\" css-2b097c-container\\">
-              <div class=\\"react-select__control css-r5n82u-control\\">
-                <div class=\\"react-select__value-container react-select__value-container--has-value css-1ne8613-ValueContainer\\">
+              <div class=\\"react-select__control css-cat782-control\\">
+                <div class=\\"react-select__value-container react-select__value-container--has-value css-17yk2dy-ValueContainer\\">
                   <div class=\\"react-select__single-value css-1wh03ml-singleValue\\">
                     Use defaults from karma config file
                   </div>
@@ -481,10 +412,10 @@ exports[`<Configuration /> matches snapshot 1`] = `
                              tabindex=\\"0\\"
                              type=\\"text\\"
                              aria-autocomplete=\\"list\\"
-                             style=\\"box-sizing: content-box; width: 2px; border: 0px; font-size: inherit; opacity: 1; outline: 0; padding: 0px;\\"
+                             style=\\"box-sizing: content-box; width: 2px; border: 0px; opacity: 1; outline: 0; padding: 0px;\\"
                              value
                       >
-                      <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-size: inherit; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
+                      <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
                       </div>
                     </div>
                   </div>
@@ -544,8 +475,8 @@ exports[`<Configuration /> matches snapshot 1`] = `
         <div class=\\"d-flex flex-fill flex-lg-row flex-column justify-content-between\\">
           <div class=\\"flex-shrink-0 flex-grow-1 flex-basis-auto mx-0 mx-lg-1 mt-1 mt-lg-0\\">
             <div class=\\" css-2b097c-container\\">
-              <div class=\\"react-select__control css-r5n82u-control\\">
-                <div class=\\"react-select__value-container react-select__value-container--has-value css-1ne8613-ValueContainer\\">
+              <div class=\\"react-select__control css-cat782-control\\">
+                <div class=\\"react-select__value-container react-select__value-container--has-value css-17yk2dy-ValueContainer\\">
                   <div class=\\"react-select__single-value css-1wh03ml-singleValue\\">
                     Disable multi-grid
                   </div>
@@ -561,10 +492,10 @@ exports[`<Configuration /> matches snapshot 1`] = `
                              tabindex=\\"0\\"
                              type=\\"text\\"
                              aria-autocomplete=\\"list\\"
-                             style=\\"box-sizing: content-box; width: 2px; border: 0px; font-size: inherit; opacity: 1; outline: 0; padding: 0px;\\"
+                             style=\\"box-sizing: content-box; width: 2px; border: 0px; opacity: 1; outline: 0; padding: 0px;\\"
                              value
                       >
-                      <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-size: inherit; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
+                      <div style=\\"position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;\\">
                       </div>
                     </div>
                   </div>

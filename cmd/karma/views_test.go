@@ -857,7 +857,7 @@ func TestEmptySettings(t *testing.T) {
 			Enabled:         false,
 			DurationSeconds: 900,
 			Author:          "karma",
-			CommentPrefix:   "ACK!",
+			Comment:         "ACK! This alert was acknowledged using karma on %NOW%",
 		},
 	}
 
@@ -1002,6 +1002,10 @@ func TestAuthentication(t *testing.T) {
 				"/silences.json",
 				"/custom.css",
 				"/custom.js",
+				"/health",
+				"/health?foo",
+				"/metrics",
+				"/metrics?bar=foo",
 			} {
 				req := httptest.NewRequest("GET", path, nil)
 				for k, v := range testCase.requestHeaders {
@@ -1010,6 +1014,14 @@ func TestAuthentication(t *testing.T) {
 				req.SetBasicAuth(testCase.requestBasicAuthUser, testCase.requestBasicAuthPassword)
 				resp := httptest.NewRecorder()
 				r.ServeHTTP(resp, req)
+
+				if strings.HasPrefix(path, "/health") || strings.HasPrefix(path, "/metrics") {
+					if resp.Code != 200 {
+						t.Errorf("%s should always return 200, got %d", path, resp.Code)
+					}
+					continue
+				}
+
 				if resp.Code != testCase.responseCode {
 					t.Errorf("Expected %d from %s, got %d", testCase.responseCode, path, resp.Code)
 				}
@@ -2242,7 +2254,7 @@ func TestUpstreamStatus(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.Name, func(t *testing.T) {
-			zerolog.SetGlobalLevel(zerolog.DebugLevel)
+			zerolog.SetGlobalLevel(zerolog.FatalLevel)
 
 			httpmock.Activate()
 			defer httpmock.DeactivateAndReset()
@@ -2316,5 +2328,80 @@ func TestGetUserFromContextPresent(t *testing.T) {
 	user := getUserFromContext(req.WithContext(ctx))
 	if user == "" {
 		t.Errorf("getUserFromContext() returned user=%q", user)
+	}
+}
+
+func TestHealthcheckAlerts(t *testing.T) {
+	type testCaseT struct {
+		healthchecks map[string][]string
+		hasError     bool
+	}
+
+	testCases := []testCaseT{
+		{
+			healthchecks: map[string][]string{},
+			hasError:     false,
+		},
+		{
+			healthchecks: map[string][]string{
+				"active": {"alertname=Host_Down"},
+			},
+			hasError: false,
+		},
+		{
+			healthchecks: map[string][]string{
+				"active": {
+					"alertname=Host_Down",
+					"cluster=staging",
+				},
+			},
+			hasError: false,
+		},
+		{
+			healthchecks: map[string][]string{
+				"active": {"alertname=FooBar"},
+			},
+			hasError: true,
+		},
+		{
+			healthchecks: map[string][]string{
+				"active": {
+					"alertname=Host_Down",
+					"cluster=unknown",
+				},
+			},
+			hasError: true,
+		},
+	}
+
+	zerolog.SetGlobalLevel(zerolog.FatalLevel)
+	for i, testCase := range testCases {
+		for _, version := range mock.ListAllMocks() {
+			t.Run(fmt.Sprintf("%d/%s", i, version), func(t *testing.T) {
+				httpmock.Activate()
+				defer httpmock.DeactivateAndReset()
+				mockCache()
+				mock.RegisterURL("http://localhost/metrics", version, "metrics")
+				mock.RegisterURL("http://localhost/api/v2/status", version, "api/v2/status")
+				mock.RegisterURL("http://localhost/api/v2/silences", version, "api/v2/silences")
+				mock.RegisterURL("http://localhost/api/v2/alerts/groups", version, "api/v2/alerts/groups")
+
+				am, err := alertmanager.NewAlertmanager(
+					"cluster",
+					"healthchecks",
+					"http://localhost",
+					alertmanager.WithHealthchecks(testCase.healthchecks),
+				)
+				if err != nil {
+					t.Error(err)
+					return
+				}
+				_ = am.Pull()
+				hasError := am.Error() != ""
+				if hasError != testCase.hasError {
+					t.Errorf("error=%q expected=%v", am.Error(), testCase.hasError)
+				}
+			})
+		}
 	}
 }

@@ -58,7 +58,7 @@ func SetupFlags(f *pflag.FlagSet) {
 	f.Bool("alertAcknowledgement.enabled", false, "Enable alert acknowledging")
 	f.Duration("alertAcknowledgement.duration", time.Minute*15, "Initial silence duration when acknowledging alerts with short lived silences")
 	f.String("alertAcknowledgement.author", "karma", "Default silence author when acknowledging alerts with short lived silences")
-	f.String("alertAcknowledgement.commentPrefix", "ACK!", "Comment prefix used when acknowledging alerts with short lived silences")
+	f.String("alertAcknowledgement.comment", "ACK! This alert was acknowledged using karma on %NOW%", "Comment used when acknowledging alerts with short lived silences")
 
 	f.String("authorization.acl.silences", "", "Path to silence ACL config file")
 
@@ -112,6 +112,8 @@ func SetupFlags(f *pflag.FlagSet) {
 	f.String("listen.address", "", "IP/Hostname to listen on")
 	f.Int("listen.port", 8080, "HTTP port to listen on")
 	f.String("listen.prefix", "/", "URL prefix")
+	f.String("listen.tls.cert", "", "TLS certificate path (enables HTTPS)")
+	f.String("listen.tls.key", "", "TLS key path (enables HTTPS)")
 
 	f.String("sentry.public", "", "Sentry DSN for Go exceptions")
 	f.String("sentry.private", "", "Sentry DSN for JavaScript exceptions")
@@ -191,8 +193,8 @@ func readEnvVariables(k *koanf.Koanf) {
 			return "alertAcknowledgement.duration"
 		case "ALERTACKNOWLEDGEMENT_AUTHOR":
 			return "alertAcknowledgement.author"
-		case "ALERTACKNOWLEDGEMENT_COMMENTPREFIX":
-			return "alertAcknowledgement.commentPrefix"
+		case "ALERTACKNOWLEDGEMENT_COMMENT":
+			return "alertAcknowledgement.comment"
 		case "AUTHENTICATION_HEADER_VALUE_RE":
 			return "authentication.header.value_re"
 		case "SILENCEFORM_STRIP_LABELS":
@@ -349,6 +351,14 @@ func (config *configSchema) Read(flags *pflag.FlagSet) (string, error) {
 		return "", fmt.Errorf("listen.prefix must start with '/', got %q", config.Listen.Prefix)
 	}
 
+	if config.Listen.TLS.Cert != "" && config.Listen.TLS.Key == "" {
+		return "", fmt.Errorf("listen.tls.key must be set when listen.tls.cert is set")
+	}
+
+	if config.Listen.TLS.Key != "" && config.Listen.TLS.Cert == "" {
+		return "", fmt.Errorf("listen.tls.cert must be set when listen.tls.key is set")
+	}
+
 	// accept single Alertmanager server from flag/env if nothing is set yet
 	if len(config.Alertmanager.Servers) == 0 && config.Alertmanager.URI != "" {
 		config.Alertmanager.Servers = []AlertmanagerConfig{
@@ -399,6 +409,7 @@ func (config *configSchema) LogValues() {
 			ReadOnly:    s.ReadOnly,
 			Headers:     s.Headers,
 			CORS:        s.CORS,
+			Healthcheck: s.Healthcheck,
 		}
 		servers = append(servers, server)
 	}

@@ -38,7 +38,7 @@ func badRequestJSON(w http.ResponseWriter, error string) {
 }
 
 func pong(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte("Pong"))
+	_, _ = w.Write([]byte("Pong\n"))
 }
 
 func compressResponse(data []byte) ([]byte, error) {
@@ -79,8 +79,18 @@ func decompressCachedResponse(data []byte) ([]byte, error) {
 	return p, nil
 }
 
+func pushPath(w http.ResponseWriter, path string) {
+	if pusher, ok := w.(http.Pusher); ok {
+		if err := pusher.Push(path, nil); err != nil {
+			log.Debug().Err(err).Str("path", path).Msg("Failed to push server path via HTTP/2")
+		}
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	noCache(w)
+	pushPath(w, getViewURL("/custom.css"))
+	pushPath(w, getViewURL("/custom.js"))
 
 	filtersJSON, _ := json.Marshal(config.Config.Filters.Default)
 	filtersB64 := base64.StdEncoding.EncodeToString(filtersJSON)
@@ -157,7 +167,7 @@ func alerts(w http.ResponseWriter, r *http.Request) {
 			Enabled:         config.Config.AlertAcknowledgement.Enabled,
 			DurationSeconds: int(config.Config.AlertAcknowledgement.Duration.Seconds()),
 			Author:          config.Config.AlertAcknowledgement.Author,
-			CommentPrefix:   config.Config.AlertAcknowledgement.CommentPrefix,
+			Comment:         config.Config.AlertAcknowledgement.Comment,
 		},
 	}
 	resp.Authentication = models.AuthenticationInfo{
